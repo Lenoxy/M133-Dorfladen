@@ -3,6 +3,7 @@ export interface ProductDto {
     productName: string
     specialOffer: number,
     normalPrice: number,
-    imageBase64: string,
+    // Base64 String with image
+    imageName: string,
     description: string
 }
