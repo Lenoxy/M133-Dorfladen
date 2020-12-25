@@ -1,5 +1,10 @@
-fdafd
-
-<div *ngFor="let product of products">
-    <img [src]="'data:image/png;base64,' + product.imageName">
+<div class="overview-flex">
+    <div *ngFor="let product of products" class="overview-item">
+        <img [src]="'data:image/png;base64,' + product.imageName" class="overview-image">
+        <span class="overview-title">{{product.productName}}</span>
+        <span>
+            <span class="price">{{product.normalPrice | currency:'CHF '}}</span>
+            <span class="reduced-price">{{product.specialOffer | currency:'CHF '}}</span>
+        </span>
+    </div>
 </div>

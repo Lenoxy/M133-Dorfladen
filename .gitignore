@@ -31,6 +31,7 @@ e2e/*.map
 
 # System Files
 .DS_Store/
+.DS_Store
 
 ### Node ###
 # Logs

@@ -1,0 +1,28 @@
+.overview-flex {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+}
+
+.overview-item {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+
+  .overview-image {
+    width: 300px;
+  }
+
+  .overview-title {
+
+  }
+
+  .price {
+    padding-right: 5px;
+  }
+
+  .reduced-price {
+    color: red;
+    text-decoration: line-through;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../product.service';
 import {ProductDto} from '../../../../shared-types/product.dto';
 
@@ -14,7 +14,6 @@ export class OverviewComponent implements OnInit {
   public products: ProductDto[];
 
   async ngOnInit(): Promise<void> {
-    console.log('fdafds');
     this.products = await this.productService.getProducts();
     console.log(this.products);
   }
