@@ -15,16 +15,20 @@ export class ProductService {
         return this.http.get<ProductDto[]>(environment.api + 'items').toPromise();
     }
 
-    public async getProductDetail(productId: number): Promise<ProductDto> {
+    public async getProductDetail(productId: string): Promise<ProductDto> {
         return this.http.get<ProductDto>(environment.api + 'item/' + productId).toPromise();
     }
 
-    public async addProductToBasket(productId: number): Promise<void> {
-        //return this.http.post<void>(environment.api + 'api/cart', productId).toPromise();
+    public async getCartPrice(): Promise<number> {
+        return this.http.get<number>(environment.api + 'cart').toPromise();
+    }
+
+    public async addProductToBasket(productId: string): Promise<void> {
+        return this.http.post<void>(environment.api + 'cart/' + productId, null).toPromise();
     }
 
     public async removeProductFromBasket(productId: number): Promise<void> {
-        //return this.http.delete<void>(environment.api + 'api/cart', productId).toPromise();
+        return this.http.delete<void>(environment.api + 'cart/' + productId).toPromise();
     }
 
 }

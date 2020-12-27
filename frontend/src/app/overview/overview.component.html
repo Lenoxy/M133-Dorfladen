@@ -1,5 +1,6 @@
+<app-mini-cart></app-mini-cart>
 <div class="overview-flex">
-    <div *ngFor="let product of products" class="overview-item">
+    <div *ngFor="let product of products" (click)="navigateToDetail(product.id)" class="overview-item">
         <img [src]="'data:image/png;base64,' + product.imageName" class="overview-image">
         <span class="overview-title">{{product.productName}}</span>
         <span>

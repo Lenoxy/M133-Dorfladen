@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {ProductService} from '../product.service';
+import {ProductDto} from '../../../../shared-types/product.dto';
 
 @Component({
     selector: 'app-detail',
@@ -8,14 +10,21 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class DetailComponent implements OnInit {
 
-    constructor(private route: ActivatedRoute,
+    constructor(
+        private route: ActivatedRoute,
+        private productService: ProductService,
     ) {
     }
 
-    ngOnInit(): void {
-        const productIdFromRoute = this.route.snapshot.paramMap.get('productId');
-        console.log(productIdFromRoute);
+    public product: ProductDto;
 
+    async ngOnInit() {
+        const productIdFromRoute = this.route.snapshot.paramMap.get('productId');
+        this.product = await this.productService.getProductDetail(productIdFromRoute);
+    }
+
+    addToBasket() {
+        this.productService.addProductToBasket(this.product.id);
     }
 
 }

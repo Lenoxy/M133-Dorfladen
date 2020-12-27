@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../product.service';
 import {ProductDto} from '../../../../shared-types/product.dto';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-overview',
@@ -9,13 +10,17 @@ import {ProductDto} from '../../../../shared-types/product.dto';
 })
 export class OverviewComponent implements OnInit {
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private router: Router) { }
 
   public products: ProductDto[];
 
   async ngOnInit(): Promise<void> {
     this.products = await this.productService.getProducts();
     console.log(this.products);
+  }
+
+  navigateToDetail(id: string){
+    this.router.navigate(['detail', id]);
   }
 
 }

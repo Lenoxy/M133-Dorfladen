@@ -8,6 +8,7 @@ import {DetailComponent} from './detail/detail.component';
 import {CartComponent} from './cart/cart.component';
 import {CheckoutComponent} from './checkout/checkout.component';
 import {HttpClientModule} from '@angular/common/http';
+import { MiniCartComponent } from './mini-cart/mini-cart.component';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import {HttpClientModule} from '@angular/common/http';
         OverviewComponent,
         DetailComponent,
         CartComponent,
-        CheckoutComponent
+        CheckoutComponent,
+        MiniCartComponent
     ],
     imports: [
         BrowserModule,

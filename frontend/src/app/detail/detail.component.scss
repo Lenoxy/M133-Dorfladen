@@ -1,0 +1,39 @@
+.detail-flex {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+}
+
+.detail-image {
+  width: 50%;
+}
+
+.detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+
+  > *{
+    margin: 10px;
+  }
+
+  .detail-title{
+    font-weight: bold;
+    color: orange;
+    font-size: 20px;
+  }
+
+  .detail-button{
+    color: orange;
+    background-color: transparent;
+    border: 1px orange solid;
+    border-radius: 2px;
+  }
+
+  .price {
+    color: red;
+    text-decoration: line-through;
+    padding-right: 5px;
+  }
+}

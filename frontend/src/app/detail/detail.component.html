@@ -1,1 +1,14 @@
-<p>detail works!</p>
+<div class="detail-flex">
+    <img [src]="'data:image/png;base64,' + product.imageName" class="detail-image" [alt]="product.description">
+    <div class="detail-sidebar">
+        <span class="detail-title">{{product.productName}}</span>
+        <span class="detail-description">{{product.description}}</span>
+        <span>
+            <span class="price">{{product.normalPrice | currency:'CHF '}}</span>
+            <span class="reduced-price">{{product.specialOffer | currency:'CHF '}}</span>
+        </span>
+        <button (click)="addToBasket()" class="detail-button">
+            Zum Warenkorb hinzufügen
+        </button>
+    </div>
+</div>
