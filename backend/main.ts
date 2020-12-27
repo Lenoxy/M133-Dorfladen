@@ -7,7 +7,6 @@ const angularBuildPath = '../frontend/dist/M133-Dorfladen';
 const app = new Application();
 const router = new Router();
 
-
 // Session konfigurieren und starten
 //const session = new Session({framework: 'oak'});
 //await session.init();
@@ -18,22 +17,20 @@ let products: ProductDto[];
 console.log('Fetching data from products.json');
 await getItemsFromJson();
 
-app.use(async (context) => {
-    console.log(context.request.url.pathname)
-    if(context.request.url.pathname.includes('api')){
-        console.log('api call')
-        return;
-    }
+async function serveStatic(context: any) {
+    console.log(context.request.url.pathname);
     await context.send({
-        root: Deno.cwd() +'/' +  angularBuildPath,
-        index: "index.html",
-        path: context.request.url.pathname.includes(".")
+        root: Deno.cwd() + '/' + angularBuildPath,
+        index: 'index.html',
+        path: context.request.url.pathname.includes('.')
             ? context.request.url.pathname
-            : "index.html"
+            : 'index.html'
     });
-});
+}
 
 router
+    .get('/', (context) => serveStatic(context))
+    .get('/:pathname', (context) => serveStatic(context))
     .get('/api/items', (context) => {
         context.response.body = products;
     })
