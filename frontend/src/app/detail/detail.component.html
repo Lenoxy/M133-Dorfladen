@@ -1,5 +1,7 @@
 <div class="detail-flex">
-    <img [src]="'data:image/png;base64,' + product.imageName" class="detail-image" [alt]="product.description">
+    <div class="detail-image">
+        <img *ngIf="product.imageName" [alt]="product.description" [src]="product.imageName">
+    </div>
     <div class="detail-sidebar">
         <span class="detail-title">{{product.productName}}</span>
         <span class="detail-description">{{product.description}}</span>

@@ -1,4 +1,4 @@
-export interface ShoppingCart {
+export interface ShoppingCartType {
     sid: string;
 
     // ProductId, amount in basket

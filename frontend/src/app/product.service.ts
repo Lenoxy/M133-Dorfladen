@@ -12,7 +12,7 @@ export class ProductService {
     }
 
     public async getProducts(): Promise<ProductDto[]> {
-        return this.http.get<ProductDto[]>(environment.api + 'items').toPromise();
+        return this.http.get<ProductDto[]>(environment.api + 'items/').toPromise();
     }
 
     public async getProductDetail(productId: string): Promise<ProductDto> {
@@ -20,14 +20,18 @@ export class ProductService {
     }
 
     public async getCartPrice(): Promise<number> {
-        return this.http.get<number>(environment.api + 'cart').toPromise();
+        return this.http.get<number>(environment.api + 'cart/cost/').toPromise();
+    }
+
+    public async getCart(): Promise<[ProductDto, number][]> {
+        return this.http.get<[ProductDto, number][]>(environment.api + 'cart/').toPromise();
     }
 
     public async addProductToBasket(productId: string): Promise<void> {
         return this.http.post<void>(environment.api + 'cart/' + productId, null).toPromise();
     }
 
-    public async removeProductFromBasket(productId: number): Promise<void> {
+    public async removeProductFromBasket(productId: string): Promise<void> {
         return this.http.delete<void>(environment.api + 'cart/' + productId).toPromise();
     }
 

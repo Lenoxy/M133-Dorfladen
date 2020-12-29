@@ -1,0 +1,17 @@
+.mini-cart {
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border: 1px solid orange;
+  border-radius: 2px;
+  cursor: pointer;
+
+  .mini-cart-icon {
+    width: 50px;
+  }
+
+  .mini-cart-price {
+    color: orange;
+  }
+}

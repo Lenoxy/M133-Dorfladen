@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../product.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-mini-cart',
@@ -9,7 +10,8 @@ import {ProductService} from '../product.service';
 export class MiniCartComponent implements OnInit {
 
     constructor(
-        private productService: ProductService
+        private productService: ProductService,
+        private router: Router
     ) {
     }
 
@@ -17,6 +19,9 @@ export class MiniCartComponent implements OnInit {
 
     async ngOnInit() {
         this.price = await this.productService.getCartPrice();
-        console.log(this.price);
+    }
+
+    routeToCart() {
+        this.router.navigateByUrl('/cart');
     }
 }

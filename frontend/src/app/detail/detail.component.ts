@@ -16,15 +16,15 @@ export class DetailComponent implements OnInit {
     ) {
     }
 
-    public product: ProductDto;
+    public product: ProductDto = {} as ProductDto;
 
     async ngOnInit() {
         const productIdFromRoute = this.route.snapshot.paramMap.get('productId');
         this.product = await this.productService.getProductDetail(productIdFromRoute);
     }
 
-    addToBasket() {
-        this.productService.addProductToBasket(this.product.id);
+    async addToBasket() {
+        await this.productService.addProductToBasket(this.product.id);
     }
 
 }

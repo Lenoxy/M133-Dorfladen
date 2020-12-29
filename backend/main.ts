@@ -3,7 +3,7 @@ import {Base64} from 'https://deno.land/x/bb64@1.1.0/mod.ts';
 import {Session} from 'https://deno.land/x/session@1.1.0/mod.ts';
 import {v4} from 'https://deno.land/std@0.82.0/uuid/mod.ts';
 import {ProductDto} from '../dto/product.dto.ts';
-import {ShoppingCart} from './types/shopping-cart.type.ts';
+import {ShoppingCartType} from './types/shopping-cart.type.ts';
 
 const angularBuildPath = '../frontend/dist/M133-Dorfladen';
 
@@ -17,7 +17,7 @@ app.use(session.use()(session));
 
 let products: ProductDto[];
 
-const shoppingCarts: ShoppingCart[] = [];
+const shoppingCarts: ShoppingCartType[] = [];
 
 console.log('Fetching data from products.json');
 await getItemsFromJson();
@@ -49,7 +49,7 @@ router
         );
     })
 
-    .get('/webshop/api/cart', async (context) => {
+    .get('/webshop/api/cart/cost', async (context) => {
         const sid = await manageSession(context);
         const shoppingCart = getCartBySid(sid);
 
@@ -60,6 +60,19 @@ router
         });
         // Weird maths here in order to round to 2 decimals
         context.response.body = Math.round(price * 100) / 100;
+    })
+
+    .get('/webshop/api/cart', async (context) => {
+        const sid = await manageSession(context);
+        const shoppingCart = getCartBySid(sid);
+
+        let returnShoppingCart: [ProductDto, number][] = [];
+
+        shoppingCart.products.forEach((amount: number, id: string) => {
+            returnShoppingCart.push([getProductById(id), amount]);
+        });
+
+        context.response.body = returnShoppingCart;
     })
 
     .post('/webshop/api/cart/:id', async (context) => {
@@ -79,10 +92,21 @@ router
     })
 
     .delete('/webshop/api/cart/:id', async (context) => {
-        await manageSession(context);
+        const sid = await manageSession(context);
+        const product = getProductById(context.params.id!);
+        const cart = getCartBySid(sid);
 
-        console.log(context.params.id);
-        context.response.body = null;
+        const amountOfProductToDelete = cart.products.get(product.id);
+
+        if (amountOfProductToDelete == undefined) {
+            context.response.status = 400;
+        } else if (amountOfProductToDelete <= 1) {
+            cart.products.delete(product.id);
+            context.response.status = 200;
+        } else {
+            cart.products.set(product.id, amountOfProductToDelete - 1);
+            context.response.status = 200;
+        }
     });
 
 app.use(router.routes());
@@ -94,11 +118,11 @@ async function getItemsFromJson() {
     products = JSON.parse(await Deno.readTextFile('./products.json'));
 
     products.forEach((product: ProductDto) => {
-        product.imageName = Base64.fromFile('images/' + product.imageName).toString();
+        product.imageName = 'data:image/png;base64,' + Base64.fromFile('images/' + product.imageName).toString();
     });
 }
 
-function getCartBySid(sid: string): ShoppingCart {
+function getCartBySid(sid: string): ShoppingCartType {
     return shoppingCarts.find((cart) => cart.sid === sid)!;
 }
 
