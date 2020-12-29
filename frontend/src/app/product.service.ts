@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ProductDto} from '../../../shared-types/product.dto';
+import {ProductDto} from '../../../dto/product.dto';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 

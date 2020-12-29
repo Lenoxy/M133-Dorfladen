@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../product.service';
-import {ProductDto} from '../../../../shared-types/product.dto';
+import {ProductDto} from '../../../../dto/product.dto';
 import {Router} from '@angular/router';
 
 @Component({
