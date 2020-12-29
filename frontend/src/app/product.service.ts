@@ -8,7 +8,10 @@ import {environment} from '../environments/environment';
 })
 export class ProductService {
 
+    public totalCartPrice = 0;
+
     constructor(private http: HttpClient) {
+        this.updateCartPrice();
     }
 
     public async getProducts(): Promise<ProductDto[]> {
@@ -19,8 +22,8 @@ export class ProductService {
         return this.http.get<ProductDto>(environment.api + 'item/' + productId).toPromise();
     }
 
-    public async getCartPrice(): Promise<number> {
-        return this.http.get<number>(environment.api + 'cart/cost/').toPromise();
+    public async updateCartPrice() {
+        this.totalCartPrice = await this.http.get<number>(environment.api + 'cart/cost/').toPromise();
     }
 
     public async getCart(): Promise<[ProductDto, number][]> {

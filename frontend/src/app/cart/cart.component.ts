@@ -12,34 +12,25 @@ export class CartComponent implements OnInit {
     public cart: [ProductDto, number][];
     public totalPrice = 0;
 
-    constructor(private productService: ProductService) {
+    constructor(public productService: ProductService) {
     }
 
     async ngOnInit() {
         this.cart = await this.productService.getCart();
         console.log(this.cart);
-        await this.setTotalPrice();
+        this.productService.updateCartPrice();
     }
 
     async addProduct(productId: string) {
         await this.productService.addProductToBasket(productId);
         this.cart = await this.productService.getCart();
-        this.setTotalPrice();
+        this.productService.updateCartPrice();
+
     }
 
     async removeProduct(productId: string) {
         await this.productService.removeProductFromBasket(productId);
         this.cart = await this.productService.getCart();
-        this.setTotalPrice();
+        this.productService.updateCartPrice();
     }
-
-    setTotalPrice() {
-        let totalPrice = 0;
-        this.cart.forEach((tuple) => {
-            console.log(tuple);
-            totalPrice += (tuple[0].specialOffer ? tuple[0].specialOffer : tuple[0].normalPrice) * tuple[1];
-        });
-        this.totalPrice = totalPrice;
-    }
-
 }

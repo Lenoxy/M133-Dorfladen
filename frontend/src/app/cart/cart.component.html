@@ -7,7 +7,7 @@
             <th>Total</th>
         </tr>
         <tr *ngFor="let tuple of cart">
-            <!-- TODO I'm not proud of this, though i do not think ngFor supports tuples natively-->
+            <!-- TODO reading tuples is hella ugly-->
             <td>{{tuple[0].productName}}</td>
             <td>{{(tuple[0].specialOffer ? tuple[0].specialOffer : tuple[0].normalPrice) | currency: 'CHF '}}</td>
             <td class="cart-amount">
@@ -21,7 +21,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <th>{{totalPrice | currency: 'CHF '}}</th>
+            <th>{{productService.totalCartPrice | currency: 'CHF '}}</th>
         </tr>
     </table>
 </div>
