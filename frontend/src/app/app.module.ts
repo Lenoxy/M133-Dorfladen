@@ -8,7 +8,8 @@ import {DetailComponent} from './detail/detail.component';
 import {CartComponent} from './cart/cart.component';
 import {CheckoutComponent} from './checkout/checkout.component';
 import {HttpClientModule} from '@angular/common/http';
-import { MiniCartComponent } from './mini-cart/mini-cart.component';
+import {MiniCartComponent} from './mini-cart/mini-cart.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,8 @@ import { MiniCartComponent } from './mini-cart/mini-cart.component';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

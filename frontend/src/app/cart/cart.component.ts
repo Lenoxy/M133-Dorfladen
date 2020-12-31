@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../product.service';
 import {ProductDto} from '../../../../dto/product.dto';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-cart',
@@ -12,7 +13,7 @@ export class CartComponent implements OnInit {
     public cart: [ProductDto, number][];
     public totalPrice = 0;
 
-    constructor(public productService: ProductService) {
+    constructor(public productService: ProductService, private router: Router) {
     }
 
     async ngOnInit() {
@@ -32,5 +33,9 @@ export class CartComponent implements OnInit {
         await this.productService.removeProductFromBasket(productId);
         this.cart = await this.productService.getCart();
         this.productService.updateCartPrice();
+    }
+
+    routeToCheckout() {
+        this.router.navigateByUrl('checkout');
     }
 }

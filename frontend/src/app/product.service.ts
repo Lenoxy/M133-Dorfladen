@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {ProductDto} from '../../../dto/product.dto';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
+import {ValidationDto} from '../../../dto/validation.dto';
 
 @Injectable({
     providedIn: 'root'
@@ -37,5 +38,10 @@ export class ProductService {
     public async removeProductFromBasket(productId: string): Promise<void> {
         return this.http.delete<void>(environment.api + 'cart/' + productId).toPromise();
     }
+
+    public async order(firstname: string, lastname: string, email: string): Promise<ValidationDto | undefined> {
+        return this.http.put<ValidationDto | undefined>(environment.api + 'checkout/', {firstname, lastname, email}).toPromise();
+    }
+
 
 }

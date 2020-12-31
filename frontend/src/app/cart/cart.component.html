@@ -24,4 +24,7 @@
             <th>{{productService.totalCartPrice | currency: 'CHF '}}</th>
         </tr>
     </table>
+    <div class="cart-actions">
+        <button (click)="routeToCheckout()">Checkout</button>
+    </div>
 </div>

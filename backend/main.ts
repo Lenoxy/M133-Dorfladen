@@ -4,6 +4,7 @@ import {Session} from 'https://deno.land/x/session@1.1.0/mod.ts';
 import {v4} from 'https://deno.land/std@0.82.0/uuid/mod.ts';
 import {ProductDto} from '../dto/product.dto.ts';
 import {ShoppingCartType} from './types/shopping-cart.type.ts';
+import {ValidationDto} from '../dto/validation.dto.ts';
 
 const angularBuildPath = '../frontend/dist/M133-Dorfladen';
 
@@ -107,6 +108,49 @@ router
             cart.products.set(product.id, amountOfProductToDelete - 1);
             context.response.status = 200;
         }
+    })
+    .put('/webshop/api/checkout', async (context) => {
+        const sid = await manageSession(context);
+        const cart = await getCartBySid(sid);
+        // Implement order process here
+
+        const firstname = context.params.firstname!;
+        const lastname = context.params.lastname!;
+        const email = context.params.email!;
+
+        console.log(firstname);
+        console.log(lastname);
+        console.log(email);
+
+        let validationAnswer = {firstname: [], lastname: [], email: []} as ValidationDto;
+
+        if (firstname == undefined || firstname.length <= 2) {
+            validationAnswer.firstname.push('length');
+        }
+
+        if (lastname == undefined || lastname.length <= 2) {
+            validationAnswer.lastname.push('length');
+        }
+
+        if (!email) {
+            validationAnswer.email.push('length');
+        }
+
+        if (email && !email.includes('@')) {
+            validationAnswer.email.push('at-missing');
+        }
+        if (email && !email.includes('.')) {
+            validationAnswer.lastname.push('dot-missing');
+        }
+
+        if (validationAnswer.firstname.length === 0 && validationAnswer.lastname.length === 0 && validationAnswer.email.length === 0) {
+            cart.products.clear();
+            context.response.status = 202;
+        } else {
+            context.response.body = validationAnswer;
+            context.response.status = 304;
+        }
+
     });
 
 app.use(router.routes());

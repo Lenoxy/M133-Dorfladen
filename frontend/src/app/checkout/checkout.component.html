@@ -1,1 +1,26 @@
-<p>checkout works!</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="checkoutForm">
+
+    <div>
+        <label for="firstname">
+            Firstname
+        </label>
+        <input formControlName="firstname" id="firstname" type="text">
+    </div>
+
+    <div>
+        <label for="lastname">
+            Lastname
+        </label>
+        <input formControlName="lastname" id="lastname" type="text">
+    </div>
+
+    <div>
+        <label for="email">
+            Email
+        </label>
+        <input formControlName="email" id="email" type="text">
+    </div>
+
+    <button class="button" type="submit">Purchase</button>
+
+</form>
