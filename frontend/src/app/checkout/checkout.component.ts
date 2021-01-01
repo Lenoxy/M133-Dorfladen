@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ProductService} from '../product.service';
+import {ValidationDto} from '../../../../dto/validation.dto';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-checkout',
@@ -8,21 +10,23 @@ import {ProductService} from '../product.service';
     styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
+
     checkoutForm: FormGroup;
+    validation: ValidationDto;
 
     constructor(
         private formBuilder: FormBuilder,
         private productService: ProductService,
+        private router: Router,
     ) {
-        this.checkoutForm = this.formBuilder.group({
-            firstname: new FormControl('', [Validators.required, Validators.minLength(2)]),
-            lastname: new FormControl('', [Validators.required, Validators.minLength(2)]),
-            email: new FormControl('', [Validators.required, Validators.email]),
-        });
     }
 
     ngOnInit(): void {
-
+        this.checkoutForm = this.formBuilder.group({
+            firstname: new FormControl(''),
+            lastname: new FormControl(''),
+            email: new FormControl(''),
+        });
     }
 
     async onSubmit() {
@@ -30,14 +34,33 @@ export class CheckoutComponent implements OnInit {
         const lastname = this.checkoutForm.get('lastname').value;
         const email = this.checkoutForm.get('email').value;
 
-        this.productService.order(firstname, lastname, email).then((answer) => {
-            console.log(answer);
-        }).catch((answer) => {
-            console.log(answer);
-        });
+        console.log(email);
+        const frontendValidationAnswer = new ValidationDto(firstname, lastname, email);
+        if (!frontendValidationAnswer.isValid()) {
+            console.warn('frontend val');
+            this.validation = frontendValidationAnswer;
 
-        this.checkoutForm.reset();
+        } else {
+            console.log('frontend val PASSED');
 
+            // Deep clone object in order to use the functions
+            const backendValidationAnswer: ValidationDto = new ValidationDto(null, null, null);
+            Object.assign(backendValidationAnswer, await this.productService.order(firstname, lastname, email));
+            console.log(backendValidationAnswer);
+
+            if (!backendValidationAnswer.isValid()) {
+                console.warn('backend val');
+                this.validation = backendValidationAnswer;
+            } else {
+                console.log('backend val PASSED');
+
+                console.log('Order placed');
+                alert('Order placed successfully');
+                this.checkoutForm.reset();
+                await this.router.navigateByUrl('/');
+            }
+        }
+        console.log(this.validation);
     }
 
 }

@@ -112,45 +112,21 @@ router
     .put('/webshop/api/checkout', async (context) => {
         const sid = await manageSession(context);
         const cart = await getCartBySid(sid);
-        // Implement order process here
+        const httpBody = await context.request.body();
+        const userData: { firstname: string, lastname: string, email: string } = await httpBody.value;
 
-        const firstname = context.params.firstname!;
-        const lastname = context.params.lastname!;
-        const email = context.params.email!;
+        let validationDto = new ValidationDto(userData.firstname, userData.lastname, userData.email);
 
-        console.log(firstname);
-        console.log(lastname);
-        console.log(email);
+        if (validationDto.isValid()) {
+            // Implement order process here
 
-        let validationAnswer = {firstname: [], lastname: [], email: []} as ValidationDto;
-
-        if (firstname == undefined || firstname.length <= 2) {
-            validationAnswer.firstname.push('length');
-        }
-
-        if (lastname == undefined || lastname.length <= 2) {
-            validationAnswer.lastname.push('length');
-        }
-
-        if (!email) {
-            validationAnswer.email.push('length');
-        }
-
-        if (email && !email.includes('@')) {
-            validationAnswer.email.push('at-missing');
-        }
-        if (email && !email.includes('.')) {
-            validationAnswer.lastname.push('dot-missing');
-        }
-
-        if (validationAnswer.firstname.length === 0 && validationAnswer.lastname.length === 0 && validationAnswer.email.length === 0) {
             cart.products.clear();
             context.response.status = 202;
         } else {
-            context.response.body = validationAnswer;
             context.response.status = 304;
         }
-
+        console.log(JSON.stringify(validationDto));
+        context.response.body = JSON.stringify(validationDto);
     });
 
 app.use(router.routes());

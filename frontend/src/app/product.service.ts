@@ -39,8 +39,8 @@ export class ProductService {
         return this.http.delete<void>(environment.api + 'cart/' + productId).toPromise();
     }
 
-    public async order(firstname: string, lastname: string, email: string): Promise<ValidationDto | undefined> {
-        return this.http.put<ValidationDto | undefined>(environment.api + 'checkout/', {firstname, lastname, email}).toPromise();
+    public async order(firstname: string, lastname: string, email: string): Promise<ValidationDto> {
+        return this.http.put<ValidationDto>(environment.api + 'checkout/', {firstname, lastname, email}).toPromise();
     }
 
 

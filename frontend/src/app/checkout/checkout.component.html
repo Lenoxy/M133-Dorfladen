@@ -1,26 +1,27 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="checkoutForm">
-
     <div>
         <label for="firstname">
             Firstname
         </label>
         <input formControlName="firstname" id="firstname" type="text">
+        <span *ngIf="validation && validation.firstname.includes('length')">Firstname must contain two or more characters</span>
     </div>
-
     <div>
         <label for="lastname">
             Lastname
         </label>
         <input formControlName="lastname" id="lastname" type="text">
+        <span *ngIf="validation && validation.lastname.includes('length')">Lastname must contain two or more characters</span>
     </div>
-
     <div>
         <label for="email">
             Email
         </label>
         <input formControlName="email" id="email" type="text">
+        <span *ngIf="validation && validation.email.includes('length')">Email must contain one or more characters</span>
+        <span *ngIf="validation && validation.email.includes('at-missing')">Email must contain an @-character</span>
+        <span *ngIf="validation && validation.email.includes('dot-missing')">Email must contain a dot character</span>
+
     </div>
-
     <button class="button" type="submit">Purchase</button>
-
 </form>
