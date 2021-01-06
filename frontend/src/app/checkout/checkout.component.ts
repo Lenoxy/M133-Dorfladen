@@ -60,7 +60,7 @@ export class CheckoutComponent implements OnInit {
                 this.validation = backendValidationAnswer;
             } else {
                 console.log('Passed backend validation');
-                this.order();
+                await this.order();
             }
         }
     }

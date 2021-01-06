@@ -1,3 +1,4 @@
+<app-mini-cart></app-mini-cart>
 <div class="cart">
     <table>
         <tr>
@@ -7,7 +8,7 @@
             <th>Total</th>
         </tr>
         <tr *ngFor="let tuple of cart">
-            <!-- TODO reading tuples is hella ugly-->
+            <!-- reading tuples is hella ugly-->
             <td>{{tuple[0].productName}}</td>
             <td>{{(tuple[0].specialOffer ? tuple[0].specialOffer : tuple[0].normalPrice) | currency: 'CHF '}}</td>
             <td class="cart-amount">

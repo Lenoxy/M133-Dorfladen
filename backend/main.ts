@@ -9,7 +9,7 @@ const angularBuildPath = '../frontend/dist/M133-Dorfladen';
 const app = new Application();
 const router = new Router();
 
-// Confugire and start session
+// Configure and start session
 const session = new Session({framework: 'oak'});
 await session.init();
 app.use(session.use()(session));

@@ -12,7 +12,6 @@ export class ProductService {
     public totalCartPrice = 0;
 
     constructor(private http: HttpClient) {
-        this.updateCartPrice();
     }
 
     public async getProducts(): Promise<ProductDto[]> {

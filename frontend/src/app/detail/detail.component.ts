@@ -25,7 +25,7 @@ export class DetailComponent implements OnInit {
 
     async addToBasket() {
         await this.productService.addProductToBasket(this.product.id);
-        this.productService.updateCartPrice();
+        await this.productService.updateCartPrice();
     }
 
 }
