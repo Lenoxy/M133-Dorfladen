@@ -29,6 +29,18 @@ export class CheckoutComponent implements OnInit {
         });
     }
 
+    deepCloneValidationDto(toCloneDto: ValidationDto): ValidationDto {
+        const clonedDto = new ValidationDto(null, null, null);
+        return Object.assign(clonedDto, toCloneDto);
+    }
+
+    async order() {
+        this.checkoutForm.reset();
+        await this.productService.updateCartPrice();
+        alert('Order placed successfully');
+        await this.router.navigateByUrl('/');
+    }
+
     async onSubmit() {
         const firstname = this.checkoutForm.get('firstname').value;
         const lastname = this.checkoutForm.get('lastname').value;
@@ -37,30 +49,21 @@ export class CheckoutComponent implements OnInit {
         console.log(email);
         const frontendValidationAnswer = new ValidationDto(firstname, lastname, email);
         if (!frontendValidationAnswer.isValid()) {
-            console.warn('frontend val');
+            console.warn('Failed frontend validation');
             this.validation = frontendValidationAnswer;
-
         } else {
-            console.log('frontend val PASSED');
-
+            console.log('Passed frontend validation');
             // Deep clone object in order to use the functions
-            const backendValidationAnswer: ValidationDto = new ValidationDto(null, null, null);
-            Object.assign(backendValidationAnswer, await this.productService.order(firstname, lastname, email));
-            console.log(backendValidationAnswer);
-
+            const backendValidationAnswer = this.deepCloneValidationDto(await this.productService.order(firstname, lastname, email));
             if (!backendValidationAnswer.isValid()) {
-                console.warn('backend val');
+                console.warn('Failed backend validation');
                 this.validation = backendValidationAnswer;
             } else {
-                console.log('backend val PASSED');
-
-                console.log('Order placed');
-                alert('Order placed successfully');
-                this.checkoutForm.reset();
-                await this.router.navigateByUrl('/');
+                console.log('Passed backend validation');
+                this.order();
             }
         }
-        console.log(this.validation);
     }
+
 
 }

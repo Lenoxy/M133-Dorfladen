@@ -25,6 +25,6 @@
         </tr>
     </table>
     <div class="cart-actions">
-        <button (click)="routeToCheckout()">Checkout</button>
+        <button (click)="routeToCheckout()" [disabled]=" cart && cart.length === 0">Checkout</button>
     </div>
 </div>

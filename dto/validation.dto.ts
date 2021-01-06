@@ -5,10 +5,6 @@ export class ValidationDto {
 
     constructor(firstname: string, lastname: string, email: string) {
 
-        console.log(firstname);
-        console.log(lastname);
-        console.log(email);
-
         if (firstname == undefined || firstname.length <= 2) {
             this.firstname.push('length');
         }

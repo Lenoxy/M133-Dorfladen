@@ -18,14 +18,13 @@ export class CartComponent implements OnInit {
 
     async ngOnInit() {
         this.cart = await this.productService.getCart();
-        console.log(this.cart);
         this.productService.updateCartPrice();
     }
 
     async addProduct(productId: string) {
         await this.productService.addProductToBasket(productId);
         this.cart = await this.productService.getCart();
-        this.productService.updateCartPrice();
+        await this.productService.updateCartPrice();
 
     }
 
@@ -36,6 +35,8 @@ export class CartComponent implements OnInit {
     }
 
     routeToCheckout() {
-        this.router.navigateByUrl('checkout');
+        if (this.cart.length > 0) {
+            this.router.navigateByUrl('checkout');
+        }
     }
 }

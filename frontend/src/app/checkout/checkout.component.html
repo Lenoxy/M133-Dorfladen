@@ -17,7 +17,7 @@
         <label for="email">
             Email
         </label>
-        <input formControlName="email" id="email" type="text">
+        <input formControlName="email" id="email" type="email">
         <span *ngIf="validation && validation.email.includes('length')">Email must contain one or more characters</span>
         <span *ngIf="validation && validation.email.includes('at-missing')">Email must contain an @-character</span>
         <span *ngIf="validation && validation.email.includes('dot-missing')">Email must contain a dot character</span>
