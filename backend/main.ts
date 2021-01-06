@@ -1,9 +1,7 @@
 import {Application, Router} from 'https://deno.land/x/oak@v6.3.1/mod.ts';
 import {Base64} from 'https://deno.land/x/bb64@1.1.0/mod.ts';
 import {Session} from 'https://deno.land/x/session@1.1.0/mod.ts';
-import {v4} from 'https://deno.land/std@0.82.0/uuid/mod.ts';
 import {ProductDto} from '../dto/product.dto.ts';
-import {ShoppingCartType} from './types/shopping-cart.type.ts';
 import {ValidationDto} from '../dto/validation.dto.ts';
 
 const angularBuildPath = '../frontend/dist/M133-Dorfladen';
@@ -17,8 +15,6 @@ await session.init();
 app.use(session.use()(session));
 
 let products: ProductDto[];
-
-const shoppingCarts: ShoppingCartType[] = [];
 
 console.log('Fetching data from products.json');
 await getItemsFromJson();
@@ -51,11 +47,10 @@ router
     })
 
     .get('/webshop/api/cart/cost', async (context) => {
-        const sid = await manageSession(context);
-        const shoppingCart = getCartBySid(sid);
+        const shoppingCart = await getShoppingCart(context);
 
         let price = 0;
-        shoppingCart.products.forEach((amount: number, id: string) => {
+        shoppingCart.forEach((amount: number, id: string) => {
             const product = getProductById(id);
             price += product.specialOffer ? product.specialOffer * amount : product.normalPrice * amount;
         });
@@ -64,12 +59,11 @@ router
     })
 
     .get('/webshop/api/cart', async (context) => {
-        const sid = await manageSession(context);
-        const shoppingCart = getCartBySid(sid);
+        const shoppingCart = await getShoppingCart(context);
 
         let returnShoppingCart: [ProductDto, number][] = [];
 
-        shoppingCart.products.forEach((amount: number, id: string) => {
+        shoppingCart.forEach((amount: number, id: string) => {
             returnShoppingCart.push([getProductById(id), amount]);
         });
 
@@ -77,41 +71,38 @@ router
     })
 
     .post('/webshop/api/cart/:id', async (context) => {
-        const sid = await manageSession(context);
+        const shoppingCart = await getShoppingCart(context);
         const product = getProductById(context.params.id!);
-        const cart = getCartBySid(sid);
 
-        const amountOfProductInCart = cart.products.get(product.id);
+        const amountOfProductInCart = shoppingCart.get(product.id);
         if (amountOfProductInCart) {
             // Add one if it already is in cart
-            cart.products.set(product.id, amountOfProductInCart + 1);
+            shoppingCart.set(product.id, amountOfProductInCart + 1);
         } else {
             // Set amount to 1 if it doesn't already exist
-            cart.products.set(product.id, 1);
+            shoppingCart.set(product.id, 1);
         }
         context.response.status = 200;
     })
 
     .delete('/webshop/api/cart/:id', async (context) => {
-        const sid = await manageSession(context);
+        const shoppingCart = await getShoppingCart(context);
         const product = getProductById(context.params.id!);
-        const cart = getCartBySid(sid);
 
-        const amountOfProductToDelete = cart.products.get(product.id);
+        const amountOfProductToDelete = shoppingCart.get(product.id);
 
         if (amountOfProductToDelete == undefined) {
             context.response.status = 400;
         } else if (amountOfProductToDelete <= 1) {
-            cart.products.delete(product.id);
+            shoppingCart.delete(product.id);
             context.response.status = 200;
         } else {
-            cart.products.set(product.id, amountOfProductToDelete - 1);
+            shoppingCart.set(product.id, amountOfProductToDelete - 1);
             context.response.status = 200;
         }
     })
     .put('/webshop/api/checkout', async (context) => {
-        const sid = await manageSession(context);
-        const cart = await getCartBySid(sid);
+        const shoppingCart = await getShoppingCart(context);
         const httpBody = await context.request.body();
         const userData: { firstname: string, lastname: string, email: string } = await httpBody.value;
 
@@ -120,12 +111,11 @@ router
         if (validationDto.isValid()) {
             // Implement order process here
 
-            cart.products.clear();
+            shoppingCart.clear();
             context.response.status = 202;
         } else {
             context.response.status = 304;
         }
-        console.log(JSON.stringify(validationDto));
         context.response.body = JSON.stringify(validationDto);
     });
 
@@ -142,27 +132,17 @@ async function getItemsFromJson() {
     });
 }
 
-function getCartBySid(sid: string): ShoppingCartType {
-    return shoppingCarts.find((cart) => cart.sid === sid)!;
-}
-
 function getProductById(id: string): ProductDto {
     return products.find((product) => product.id === id)!;
 }
 
-async function manageSession(context: any): Promise<string> {
+async function getShoppingCart(context: any): Promise<Map<string, number>> {
     // Function sets up a new Session if necessary and returns the session id
-    const sid = await context.state.session.get('sid');
-    if (!sid) {
-        const newSessionId = v4.generate();
-        console.log('Generating new sid', newSessionId);
-        await context.state.session.set('sid', newSessionId);
-
-        // Setup cart for new customer
-        shoppingCarts.push({
-            sid: newSessionId,
-            products: new Map<string, number>()
-        });
+    let cart = await context.state.session.get('cart');
+    if (!cart) {
+        // ProductId, amount in basket
+        cart = new Map<string, number>();
+        await context.state.session.set('cart', cart);
     }
-    return sid;
+    return cart;
 }
