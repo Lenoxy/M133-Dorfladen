@@ -23,5 +23,5 @@
         <span *ngIf="validation && validation.email.includes('dot-missing')">Email must contain a dot character</span>
 
     </div>
-    <button class="button" type="submit">Purchase</button>
+    <button [disabled]="!isFrontendValidationValid()" class="button" type="submit">Purchase</button>
 </form>

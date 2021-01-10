@@ -249,3 +249,5 @@ fabric.properties
 
 
 backend/main.js
+
+frontend/package-lock.json

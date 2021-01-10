@@ -5,11 +5,11 @@ export class ValidationDto {
 
     constructor(firstname: string, lastname: string, email: string) {
 
-        if (firstname == undefined || firstname.length <= 2) {
+        if (firstname == undefined || firstname.length < 2) {
             this.firstname.push('length');
         }
 
-        if (lastname == undefined || lastname.length <= 2) {
+        if (lastname == undefined || lastname.length < 2) {
             this.lastname.push('length');
         }
 

@@ -41,12 +41,21 @@ export class CheckoutComponent implements OnInit {
         await this.router.navigateByUrl('/');
     }
 
+    isFrontendValidationValid(): boolean {
+        const frontendValidationAnswer = new ValidationDto(
+            this.checkoutForm.get('firstname').value,
+            this.checkoutForm.get('lastname').value,
+            this.checkoutForm.get('email').value
+        );
+        return frontendValidationAnswer.isValid();
+    }
+
     async onSubmit() {
         const firstname = this.checkoutForm.get('firstname').value;
         const lastname = this.checkoutForm.get('lastname').value;
         const email = this.checkoutForm.get('email').value;
 
-        console.log(email);
+        // Double check and display frontend validation (even though this should never be possible)
         const frontendValidationAnswer = new ValidationDto(firstname, lastname, email);
         if (!frontendValidationAnswer.isValid()) {
             console.warn('Failed frontend validation');
