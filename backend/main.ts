@@ -101,7 +101,7 @@ router
             context.response.status = 200;
         }
     })
-    .put('/webshop/api/checkout', async (context) => {
+    .post('/webshop/api/checkout', async (context) => {
         const shoppingCart = await getShoppingCart(context);
         const httpBody = await context.request.body();
         const userData: { firstname: string, lastname: string, email: string } = await httpBody.value;

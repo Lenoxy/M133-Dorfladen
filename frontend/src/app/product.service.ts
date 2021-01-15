@@ -39,7 +39,7 @@ export class ProductService {
     }
 
     public async order(firstname: string, lastname: string, email: string): Promise<ValidationDto> {
-        return this.http.put<ValidationDto>(environment.api + 'checkout/', {firstname, lastname, email}).toPromise();
+        return this.http.post<ValidationDto>(environment.api + 'checkout/', {firstname, lastname, email}).toPromise();
     }
 
 
