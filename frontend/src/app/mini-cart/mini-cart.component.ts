@@ -15,7 +15,7 @@ export class MiniCartComponent {
     ) {
     }
 
-    routeToCart() {
-        this.router.navigateByUrl('/cart');
+    async routeToCart() {
+        await this.router.navigateByUrl('/cart');
     }
 }
